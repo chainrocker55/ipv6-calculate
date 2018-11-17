@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <script src="./big-number.js"></script>
+    <script src="./ipv6.js"></script>
+
+    <title>Calculate</title>
+</head>
+
+<body>
+
+    <section>
+        <div class="container">
+            <div class="column is-9 is-offset-4">
+                <h3 class="title">Subnet</h3>
+                <p class="subtitle">Original network</p>
+                <p id="original" class="subtitle">Result is limited to 8 entries</p>
+                <p id="original" class="subtitle"></p>
+                <p id="note" class="subtitle"></p>
+                <form method="POST" action="">
+                    <div id="s2"></div>
+                </form>
+                <br>
+                <a class="button is-light" onClick="showNext()">Show next 16</a>
+            </div>
+        </div>
+    </section>
+    <br>
+<br>
+<br>
+<br>
+
+
+</body>
+<script>
+    var ip = findGetParameter("ip");
+    var prefix = findGetParameter("prefix");
+    var i = findGetParameter("i");
+    console.log(ip)
+    console.log(prefix)
+    console.log(i)
+    var nu=16
+    showSubnet(ip, prefix, i,nu)
+    var n = parseInt(i) - parseInt(prefix)
+    var total = BigNumber(2).power(n).toString() + " network"
+    document.getElementById("note").innerHTML = total + " /" + i
+    document.getElementById("original").innerHTML = ip+"/"+prefix
+
+    function showNext(){
+        nu=nu+16
+        console.log(nu)
+        showSubnet(ip, prefix, i,nu)
+    }
+</script>
+
+</html>
