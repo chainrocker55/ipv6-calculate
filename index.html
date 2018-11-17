@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" oncontextmenu="return false;">
 
 <head>
     <meta charset="UTF-8">
@@ -9,11 +9,12 @@
     <script src="./big-number.js"></script>
     <script src="./Script.js"></script>
     <script src="./ipv6.js"></script>
-
+    <script src="./stopCopy.js"></script>
+    <script>prevent()</script>
     <title>Calculate</title>
 </head>
 
-<body>
+<body oncontextmenu="return false;">
     <section>
         <div class="hero-body">
             <div class="container ">
@@ -112,21 +113,23 @@
         <div class="container">
             <div class="column is-9 is-offset-4">
                 <h3 class="title has-text-grey">Subnet</h3>
-                <form method="POST" action=""><div id="subnet"></div></form>
-               
+                <form method="POST" action="">
+                    <div id="subnet"></div>
+                </form>
+
             </div>
         </div>
     </section>
-<br>
-<br>
-<br>
-<br>
+    <br>
+    <br>
+    <br>
+    <br>
 
 
 
 
 
 </body>
-<script>runPrefix();hide();</script>
+<script>runPrefix(); hide();</script>
 
 </html>
