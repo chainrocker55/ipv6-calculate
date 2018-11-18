@@ -14,17 +14,23 @@
         crossorigin="anonymous"></script>
         
     <script>
-        prevent();
-        $(document).bind('keydown keypress', 'ctrl+s', function () {
-            $('#save').click();
+       prevent();
+        $(document).bind('keydown', function(e) {
+        if(e.ctrlKey && (e.which == 83)) {
+            e.preventDefault();
             return false;
+        }
+        if(e.which == 123) {
+            e.preventDefault();
+            return false;
+        }
         });
     </script>
 
     <title>Calculate</title>
 </head>
 
-<body oncontextmenu="return false;" onkeypress="return disableCtrlKeyCombination(event);" onkeydown="return disableCtrlKeyCombination(event);">
+<body>
     <section>
         <div class="hero-body">
             <div class="container ">
