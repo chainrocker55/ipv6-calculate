@@ -16,10 +16,11 @@
     <script>
        prevent();
         $(document).bind('keydown', function(e) {
-        if(e.ctrlKey && (e.which == 83)) {
+        if(e.ctrlKey && (e.which == 83||e.which == 85)) {
             e.preventDefault();
             return false;
         }
+        
         if(e.which == 123) {
             e.preventDefault();
             return false;
