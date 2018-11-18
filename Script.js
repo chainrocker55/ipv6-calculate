@@ -6,10 +6,8 @@ function runPrefix() {
     var x = document.getElementById("prefix");
     for (var i = 1; i < 129; i++) {
         var option = document.createElement("option");
-        //var number;
         var number;
         if (i < 64) {
-            //number = Math.pow(2,64-i);
             var n = BigNumber(2).power(64 - i).number.reverse()
             // var n2=BigNumber(2).power(64-i)
             // console.log(n2.toString())
@@ -17,7 +15,6 @@ function runPrefix() {
             // console.log(number)
 
         } else {
-            //number = Math.pow(2,128-i);
             var n = BigNumber(2).power(128 - i).number.reverse()
             // var n2=BigNumber(2).power(128-i)
             // console.log(n2.toString())
