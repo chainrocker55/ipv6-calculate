@@ -10,7 +10,17 @@
     <script src="./Script.js"></script>
     <script src="./ipv6.js"></script>
     <script src="./stopCopy.js"></script>
-    <script>prevent()</script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+        
+    <script>
+        prevent();
+        $(document).bind('keydown keypress', 'ctrl+s', function () {
+            $('#save').click();
+            return false;
+        });
+    </script>
+
     <title>Calculate</title>
 </head>
 

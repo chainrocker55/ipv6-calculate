@@ -9,7 +9,16 @@
     <script src="./big-number.js"></script>
     <script src="./ipv6.js"></script>
     <script src="./stopCopy.js"></script>
-    <script>prevent()</script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+
+    <script>
+        prevent();
+        $(document).bind('keydown keypress', 'ctrl+s', function () {
+            $('#save').click();
+            return false;
+        });
+    </script>
     <title>Calculate</title>
 </head>
 
@@ -32,9 +41,9 @@
         </div>
     </section>
     <br>
-<br>
-<br>
-<br>
+    <br>
+    <br>
+    <br>
 
 
 </body>
@@ -45,17 +54,17 @@
     console.log(ip)
     console.log(prefix)
     console.log(i)
-    var nu=16
-    showSubnet(ip, prefix, i,nu)
+    var nu = 16
+    showSubnet(ip, prefix, i, nu)
     var n = parseInt(i) - parseInt(prefix)
     var total = BigNumber(2).power(n).toString() + " network"
     document.getElementById("note").innerHTML = total + " /" + i
-    document.getElementById("original").innerHTML = ip+"/"+prefix
+    document.getElementById("original").innerHTML = ip + "/" + prefix
 
-    function showNext(){
-        nu=nu+16
+    function showNext() {
+        nu = nu + 16
         console.log(nu)
-        showSubnet(ip, prefix, i,nu)
+        showSubnet(ip, prefix, i, nu)
     }
 </script>
 
