@@ -12,19 +12,19 @@
     <script src="./stopCopy.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
         crossorigin="anonymous"></script>
-        
+
     <script>
-       prevent();
-        $(document).bind('keydown', function(e) {
-        if(e.ctrlKey && (e.which == 83||e.which == 85)) {
-            e.preventDefault();
-            return false;
-        }
-        
-        if(e.which == 123) {
-            e.preventDefault();
-            return false;
-        }
+        prevent();
+        $(document).bind('keydown', function (e) {
+            if (e.ctrlKey && (e.which == 83 || e.which == 85)) {
+                e.preventDefault();
+                return false;
+            }
+
+            if (e.which == 123) {
+                e.preventDefault();
+                return false;
+            }
         });
     </script>
 
@@ -32,8 +32,18 @@
 </head>
 
 <body>
-    <section>
+
+    <section class="hero is-success">
         <div class="hero-body">
+            <div class="container">
+                <h1 class="title content">
+                    Create With ES6
+                </h1>
+            </div>
+        </div>
+    </section>
+    <section is-light>
+        <div class="hero-body ">
             <div class="container ">
                 <div class="column is-4 is-offset-4">
                     <h3 class="title has-text-grey">IPV6</h3>
@@ -143,7 +153,13 @@
     <br>
 
 
-
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>59160545</strong> by <a id="footer">Kachain Jantalat</a>
+            </p>
+        </div>
+    </footer>
 
 
 </body>

@@ -3,9 +3,10 @@ function hide() {
     x.style.display = "none";
     var x = document.getElementById("hide2");
     x.style.display = "none";
-
+    document.getElementById("footer").innerHTML="Kachain Jantalat"
 }
 function runPrefix() {
+    document.getElementById("footer").innerHTML="Kachain Jantalat"
     var x = document.getElementById("prefix");
     for (var i = 1; i < 129; i++) {
         var option = document.createElement("option");
