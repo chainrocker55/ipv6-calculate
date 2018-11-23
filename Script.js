@@ -219,6 +219,9 @@ function full_IPv6(ip_string) {
 }
 function checkIPV6() {
     var ip_string = document.getElementById("ip").value
+    // if(ip_string==null||ip_string==""){
+    //     return
+    // }
 
     if (isIPv6(ip_string)) {
         document.getElementById("error").innerHTML = null
