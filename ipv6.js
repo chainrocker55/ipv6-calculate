@@ -267,18 +267,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     window.ptr = ptr;
 }
 
-function getValue(ip,i){
-    var prefix=parseInt(document.getElementById("prefix").value)
-    console.log(i)
-    console.log(ip)
-    //let subnets = divideSubnet(ip, prefix, i,8);
-    //console.log(subnets)
-    var queryString = "?ip=" + ip + "&i=" + i+"&prefix="+prefix
-    window.location.href = "subnet.html" + queryString;
-    //location.replace("./subnet.html")
-
-}
-
 function showSubnet(ip,prefix,i,n) {
    // let subnets = divideSubnet(ip, prefix, i,8);
    let subnets = divideSubnet(ip, prefix, i,n);

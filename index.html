@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" oncontextmenu="return false;">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -8,25 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
     <script src="./big-number.js"></script>
     <script src="./Script.js"></script>
-    <script src="./ipv6.js"></script>
     <script src="./stopCopy.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
         crossorigin="anonymous"></script>
 
-    <script>
-        prevent();
-        $(document).bind('keydown', function (e) {
-            if (e.ctrlKey && (e.which == 83 || e.which == 85)) {
-                e.preventDefault();
-                return false;
-            }
-
-            if (e.which == 123) {
-                e.preventDefault();
-                return false;
-            }
-        });
-    </script>
+    <script>prevent();</script>
 
     <title>Calculate</title>
 </head>
@@ -65,7 +51,7 @@
                             </div>
 
                             <div class="field">
-                                <input class="button is-success is-fullwidth is-large" onClick="checkIPV6()" value="Calculate">
+                                <input class="button is-success is-fullwidth is-large" onClick="renderValues()" value="Calculate">
                             </div>
                         </form>
                     </div>
@@ -118,17 +104,17 @@
                         </tr>
 
                         <tr>
-                            <td>Integer ID</td>
+                            <td>Integer IP</td>
                             <td id="integerIP"></td>
                         </tr>
 
                         <tr>
-                            <td>Hexadecimal ID</td>
+                            <td>Hexadecimal IP</td>
                             <td id="hexIP"></td>
                         </tr>
 
                         <tr>
-                            <td>Dotted decimal ID</td>
+                            <td>Dotted decimal IP</td>
                             <td id="dotIP"></td>
                         </tr>
                     </tbody>

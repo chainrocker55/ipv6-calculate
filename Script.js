@@ -3,10 +3,15 @@ function hide() {
     x.style.display = "none";
     var x = document.getElementById("hide2");
     x.style.display = "none";
-    document.getElementById("footer").innerHTML="Kachain Jantalat"
+    document.getElementById("footer").innerHTML = "Kachain Jantalat"
+}
+function show() {
+    var x = document.getElementById("hide");
+    x.style.display = "block";
+    var x = document.getElementById("hide2");
+    x.style.display = "block";
 }
 function runPrefix() {
-    document.getElementById("footer").innerHTML="Kachain Jantalat"
     var x = document.getElementById("prefix");
     for (var i = 1; i < 129; i++) {
         var option = document.createElement("option");
@@ -24,10 +29,7 @@ function runPrefix() {
             // console.log(n2.toString())
             number = n.join("").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " addresses";
             // console.log(number)
-
         }
-        //console.log(parseInt(number))
-
         option.text = i + " (" + number + ")";
         option.value = i
         if (i == 64) {
@@ -123,31 +125,6 @@ function calculateRangeNetwork(ip, prefix) {
     return temp2;
 
 }
-
-
-function calculateRangeNetworkToHex(ip) {
-    var temp = []
-    for (var i = 0; i < ip.length; i += 4) {
-        var str = ConvertBase.bin2hex(ip[i]) + ConvertBase.bin2hex(ip[i + 1]) + ConvertBase.bin2hex(ip[i + 2]) + ConvertBase.bin2hex(ip[i + 3])
-        temp.push(str)
-    }
-    return temp;
-}
-function calculateIntegerIP(ip) {
-    console.log(ip)
-    console.log(ip.length)
-    var total = BigNumber(0)
-    for (var i = 0; i < ip.length; i++) {
-        if (ip.substring(i, i + 1) != '0') {
-            var n = 32 - i - 1
-            total.plus(BigNumber(16).power(n).multiply(ip.substring(i, i + 1)))
-        }
-
-    }
-    console.log(total.toString())
-    return total;
-}
-
 function calculateRangeSubnet(ip, prefix) {
     var subnet = ""
     for (var i = 0; i < 128; i++) {
@@ -174,26 +151,34 @@ function calculateRangeSubnet(ip, prefix) {
         temp2.push(temp.substring(j, j + 4))
     }
     return temp2;
-
-
-
 }
 
 
-function full_IPv6(ip_string) {
-    // replace ipv4 address if any
-    // var ipv4 = ip_string.match(/(.*:)([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$)/);
-    // if (ipv4) {
-    //     var ip_string = ipv4[1];
-    //     ipv4 = ipv4[2].match(/[0-9]+/g);
-    //     for (var i = 0;i < 4;i ++) {
-    //         var byte = parseInt(ipv4[i],10);
-    //         ipv4[i] = ("0" + byte.toString(16)).substr(-2);
-    //     }
-    //     ip_string += ipv4[0] + ipv4[1] + ':' + ipv4[2] + ipv4[3];
-    // }
+function calculateRangeNetworkToHex(ip) {
+    var temp = []
+    for (var i = 0; i < ip.length; i += 4) {
+        var str = ConvertBase.bin2hex(ip[i]) + ConvertBase.bin2hex(ip[i + 1]) + ConvertBase.bin2hex(ip[i + 2]) + ConvertBase.bin2hex(ip[i + 3])
+        temp.push(str)
+    }
+    return temp;
+}
+function calculateIntegerIP(ip) {
+    var total = BigNumber(0)
+    for (var i = 0; i < ip.length; i++) {
+        if (ip.substring(i, i + 1) != '0') {
+            var n = 32 - i - 1
+            total.plus(BigNumber(16).power(n).multiply(ip.substring(i, i + 1)))
+        }
 
-    // take care of leading and trailing ::
+    }
+    console.log(total.toString())
+    return total;
+}
+
+
+
+
+function convertFullIP(ip_string) {
     ip_string = ip_string.replace(/^:|:$/g, '');
 
     var ipv6 = ip_string.split(':');
@@ -213,130 +198,119 @@ function full_IPv6(ip_string) {
             ipv6[i] = hex.join(':');
         }
     }
-    console.log(ipv6.join(':'))
+
     return ipv6.join(':');
-
 }
-function checkIPV6() {
+function renderValues() {
     var ip_string = document.getElementById("ip").value
-    // if(ip_string==null||ip_string==""){
-    //     return
-    // }
 
-    if (isIPv6(ip_string)) {
+    if (checkIPV6(ip_string)) {
         document.getElementById("error").innerHTML = null
-        var ipfull = full_IPv6(ip_string)
+        //หารูปแบบเต็มของ ip
+        var ipfull = convertFullIP(ip_string)
         var prefix = parseInt(document.getElementById("prefix").value)
         console.log(ipfull + "/" + prefix)
-        document.getElementById("ipAddress").innerHTML = ip_string
-        document.getElementById("prefixLength").innerHTML = prefix
-        document.getElementById("fullIP").innerHTML = ipfull + "/" + prefix
+        document.getElementById("ipAddress").innerHTML = ip_string + "/" + prefix
 
+        //หา NetID
         var ip6 = parseIp6(ipfull);
         var network = ip6toString(ip6mask(ip6, prefix))
         console.log(network)
         document.getElementById("network").innerHTML = network
+
+        //prefix
+        document.getElementById("prefixLength").innerHTML = prefix
+
+        //ทำการหา Range Network
+        var ipv6toBi = convertIPtoBi(ipfull)
+        var strIpv6toBi = ipv6toBi.join("").toString()
+        var strRangeNetwork = calculateRangeNetwork(strIpv6toBi, prefix)
+        var hextobinStart = calculateRangeNetworkToHex(strRangeNetwork)
+        var strRangeSubnet = calculateRangeSubnet(strIpv6toBi, prefix)
+        var hextobinEnd = calculateRangeNetworkToHex(strRangeSubnet)
+        document.getElementById("networkLengthStart").innerHTML = hextobinStart.join(':') + " -"
+        document.getElementById("networkLengthEnd").innerHTML = hextobinEnd.join(':')
+
+        //จำนวน Host ทั้งหมด
         var n = 128 - prefix;
         var totolIP = BigNumber(2).power((n)).toString()
         console.log("totalIP " + totolIP.toString())
         document.getElementById("totalIP").innerHTML = totolIP.toString()
 
 
+        //render ipfull
+        document.getElementById("fullIP").innerHTML = ipfull
 
+        //fullIPHex
         var ipv6 = ipfull.split(":")
-        var hexip = ""
-        var dotip = ""
-        for (var i = 0; i < ipv6.length; i++) {
-            hexip = hexip + ipv6[i]
-            dotip = dotip + ConvertBase.hex2bin(ipv6[i]) + "."
-        }
-        document.getElementById("integerIP").innerHTML = integerIP
-        document.getElementById("hexIP").innerHTML = "0x" + hexip
-        document.getElementById("dotIP").innerHTML = dotip
+        var fullHexIP = ipv6.join("").toString()
+        document.getElementById("hexIP").innerHTML = "0x" + fullHexIP
+        console.log("FullhexIP " + fullHexIP)
 
-        var ipv6toHex2 = convertIPtoHex2(ipfull)
-        console.log(ipv6toHex2.join('.'))
-        var ipv6toDec = convertIPtoDec(ipv6toHex2)
-        console.log(ipv6toDec.join('.'))
-        document.getElementById("dotIP").innerHTML = ipv6toDec.join('.')
-        var ipv6toBi = convertIPtoBi(ipfull)
-        var stripv6toBi = ipv6toBi.join("").toString()
-
-        var strRangeNetwork = calculateRangeNetwork(stripv6toBi, prefix)
-        console.log(strRangeNetwork)
-        var hextobin1 = calculateRangeNetworkToHex(strRangeNetwork)
-        var strRangeSubnet = calculateRangeSubnet(stripv6toBi, prefix)
-        var hextobin2 = calculateRangeNetworkToHex(strRangeSubnet)
-        document.getElementById("networkLengthStart").innerHTML = hextobin1.join(':') + " -"
-        document.getElementById("networkLengthEnd").innerHTML = hextobin2.join(':')
-
-
-        var intergerIP = calculateIntegerIP(hexip).toString()
+        //ทำการหา จำนวนขนาดของ ip
+        var intergerIP = calculateIntegerIP(fullHexIP).toString()
         document.getElementById("integerIP").innerHTML = intergerIP
-        runSubnet(ip_string)
-        var x = document.getElementById("hide");
-        x.style.display = "block";
-        var x = document.getElementById("hide2");
-        x.style.display = "block";
-    
+ 
+        //dotted decimal ip
+        var ipv6toHex2 = convertIPtoHex2(ipfull)
+        var ipv6toDec = convertIPtoDec(ipv6toHex2)
+        document.getElementById("dotIP").innerHTML = ipv6toDec.join('.')
 
-        // let subnets = divideSubnet("2607:5300:60:1234::", 64, 128, 8);
-        // console.log(subnets)
+        //render การแบ่ง subnet
+        runSubnet(ip_string)
+        //แสดง ส่วนที่ซ่อนไว้
+        show();
 
     } else {
         document.getElementById("error").innerHTML = "IP is not IPV6"
         console.log("IP is not IPV6")
-        var x = document.getElementById("hide");
-        x.style.display = "none";
-        var x = document.getElementById("hide2");
-        x.style.display = "none";
+        hide();
     }
 }
 
 
 // check ipv6
-function isIPv6(ip_string) {
-    const components = ip_string.split(":");
-    if (components.length < 2 || components.length > 8)
-        return false;
-    if (components[0] !== "" || components[1] !== "") {
-        // Address does not begin with a zero compression ("::")
-        if (!components[0].match(/^[\da-f]{1,4}/i)) {
-            // Component must contain 1-4 hex characters
-            return false;
-        }
-    }
-   
-    let numberOfZeroCompressions = 0;
-    for (let i = 1; i < components.length; ++i) {
-        if (components[i] === "") {
-            // We're inside a zero compression ("::")
-            ++numberOfZeroCompressions;
-            if (numberOfZeroCompressions > 1) {
-                // Zero compression can only occur once in an address
-                return false;
-            }
-            continue;
-        }
-        if (!components[i].match(/^[\da-f]{1,4}/i)) {
-            // Component must contain 1-4 hex characters
-            return false;
-        }
-        
-    }
+function checkIPV6(ip_string) {
     var regex = /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/
-        var  regex2 = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/
-		//return regex.test(ip)
+    var regex2 = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/
 
-        console.log("regex "+regex.test(ip_string))
-        console.log("regex "+regex2.test(ip_string))
-        if(!regex.test(ip_string)){
-            return false
-        }
-        if(!regex2.test(ip_string)){
-            return false
-        }
+    console.log("regex " + regex.test(ip_string))
+    console.log("regex " + regex2.test(ip_string))
+    if (!regex.test(ip_string)) {
+        return false
+    }
+    if (!regex2.test(ip_string)) {
+        return false
+    }
     return true;
+    // const components = ip_string.split(":");
+    // if (components.length < 2 || components.length > 8)
+    //     return false;
+    // if (components[0] !== "" || components[1] !== "") {
+    //     // Address does not begin with a zero compression ("::")
+    //     if (!components[0].match(/^[\da-f]{1,4}/i)) {
+    //         // Component must contain 1-4 hex characters
+    //         return false;
+    //     }
+    // }
+
+    // let numberOfZeroCompressions = 0;
+    // for (let i = 1; i < components.length; ++i) {
+    //     if (components[i] === "") {
+    //         // We're inside a zero compression ("::")
+    //         ++numberOfZeroCompressions;
+    //         if (numberOfZeroCompressions > 1) {
+    //             // Zero compression can only occur once in an address
+    //             return false;
+    //         }
+    //         continue;
+    //     }
+    //     if (!components[i].match(/^[\da-f]{1,4}/i)) {
+    //         // Component must contain 1-4 hex characters
+    //         return false;
+    //     }
+
+    // }
 }
 
 
@@ -361,6 +335,7 @@ function parseIp6(str) {
 
     return ar;
 }
+
 function ip6toString(ar) {
     //init
     var str = "";
@@ -386,16 +361,16 @@ function ip6toString(ar) {
             continue;
         }
         if (i) str += ":";
-        str += dec2hex(ar[i]);
+        str += ConvertBase.dec2hex(ar[i]);
     }
-    //   alert("printv6 str="+str+" zsf="+zsf+" zlf="+zlf);
     return str;
 }
 function ip6mask(ip, prf) {
     if (typeof (prf) == "number")
         prf = ip6prefixToMask(prf);
     var ip2 = new Array;
-    for (var i = 0; i < 8; i++)ip2[i] = ip[i] & prf[i];
+    for (var i = 0; i < 8; i++)
+        ip2[i] = ip[i] & prf[i];
     return ip2;
 }
 function ip6prefixToMask(prf) {
@@ -423,28 +398,6 @@ function ip6prefixToMask(prf) {
         prf -= 16;
     }
     return ar;
-}
-function dec2hex(val) {
-    var str = "";
-    var minus = false;
-    if (val < 0) { minus = true; val *= -1; }
-    val = Math.floor(val);
-    while (val > 0) {
-        var v = val % 16;
-        val /= 16; val = Math.floor(val);
-        switch (v) {
-            case 10: v = "A"; break;
-            case 11: v = "B"; break;
-            case 12: v = "C"; break;
-            case 13: v = "D"; break;
-            case 14: v = "E"; break;
-            case 15: v = "F"; break;
-        }
-        str = v + str;
-    }
-    if (str == "") str = "0";
-    if (minus) str = "-" + str;
-    return str;
 }
 
 
@@ -493,99 +446,12 @@ ConvertBase.hex2dec = function (num) {
 
 this.ConvertBase = ConvertBase;
 
-
-    // calculate subnet
-// function divideSubnet (addr, mask0, mask1, limit, abbr) {
-//         if (!_validate(addr)) {
-//             throw new Error('Invalid address: ' + addr);
-//         }
-//         mask0 *= 1;
-//         mask1 *= 1;
-//         limit *= 1;
-//         mask1 = mask1 || 128;
-//         if (mask0 < 1 || mask1 < 1 || mask0 > 128 || mask1 > 128 || mask0 > mask1) {
-//             throw new Error('Invalid masks.');
-//         }
-//         let ret = [];
-//         let binAddr = _addr2bin(addr);
-//         let binNetPart = binAddr.substr(0, mask0);
-//         let binHostPart = '0'.repeat(128 - mask1);
-//         let numSubnets = Math.pow(2, mask1 - mask0);
-//         for (let i = 0; i < numSubnets; ++i) {
-//             if (!!limit && i >= limit) {
-//                 break;
-//             }
-//             let binSubnet = _leftPad(i.toString(2), '0', mask1 - mask0);
-//             let binSubAddr = binNetPart + binSubnet + binHostPart;
-//             let hexAddr = _bin2addr(binSubAddr);
-//             if (!!abbr) {
-//                 ret.push(abbreviate(hexAddr));
-//             } else {
-//                 ret.push(hexAddr);
-//             }
-
-//         }
-//         // console.log(numSubnets);
-//         // console.log(binNetPart, binSubnetPart, binHostPart);
-//         // console.log(binNetPart.length, binSubnetPart.length, binHostPart.length);
-//         // console.log(ret.length);
-//         return ret;
-//     };
-//     let _validate = function (a) {
-//         return /^[a-f0-9\\:]+$/ig.test(a);
-//     };
-//     let _addr2bin = function (addr) {
-//         let nAddr = normalize(addr);
-//         let sections = nAddr.split(":");
-//         let binAddr = '';
-//         for (let section of sections) {
-//             binAddr += _leftPad(_hex2bin(section), '0', 16);
-//         }
-//         return binAddr;
-//     };
-//     let normalize = function (a) {
-//         if (!_validate(a)) {
-//             throw new Error('Invalid address: ' + a);
-//         }
-//         a = a.toLowerCase()
-
-//         let nh = a.split(/\:\:/g);
-//         if (nh.length > 2) {
-//             throw new Error('Invalid address: ' + a);
-//         }
-
-//         let sections = [];
-//         if (nh.length == 1) {
-//             // full mode
-//             sections = a.split(/\:/g);
-//             if (sections.length !== 8) {
-//                 throw new Error('Invalid address: ' + a);
-//             }
-//         } else if (nh.length == 2) {
-//             // compact mode
-//             let n = nh[0];
-//             let h = nh[1];
-//             let ns = n.split(/\:/g);
-//             let hs = h.split(/\:/g);
-//             for (let i in ns) {
-//                 sections[i] = ns[i];
-//             }
-//             for (let i = hs.length; i > 0; --i) {
-//                 sections[7 - (hs.length - i)] = hs[i - 1];
-//             }
-//         }
-//         for (let i = 0; i < 8; ++i) {
-//             if (sections[i] === undefined) {
-//                 sections[i] = '0000';
-//             }
-//             sections[i] = _leftPad(sections[i], '0', 4);
-//         }
-//         return sections.join(':');
-//     };
-//     let _leftPad = function (d, p, n) {
-//         let padding = p.repeat(n);
-//         if (d.length < padding.length) {
-//             d = padding.substring(0, padding.length - d.length) + d;
-//         }
-//         return d;
-//     };
+//getValue to page Subnet
+function getValue(ip, i) {
+    var prefix = parseInt(document.getElementById("prefix").value)
+    console.log(i)
+    console.log(ip)
+    var queryString = "?ip=" + ip + "&i=" + i + "&prefix=" + prefix
+   // window.location.href = "subnet.html" + queryString;
+    window.open("subnet.html" + queryString,"_blank")
+}
