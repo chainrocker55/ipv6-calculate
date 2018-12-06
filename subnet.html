@@ -11,36 +11,48 @@
     <script src="./stopCopy.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
         crossorigin="anonymous"></script>
-<script> prevent();</script>
+
     <title>Calculate</title>
 </head>
 
 <body>
 
-    <section>
-        <div class="container">
-            <div class="column is-9 is-offset-4">
-                <h3 class="title">Calculate Subnet</h3>
-                <br>
-                <p class="subtitle">Original network</p>
-                
-                <p id="original" class="subtitle is-6"></p>
-                <p class="subtitle">Subnet</p>
-                <p id="note" class="subtitle is-6"></p>
-                <p class="subtitle">Result is limited to 16 entries</p>
-                <form method="POST" action="">
-                    <div id="s2"></div>
-                </form>
-                <br>
-                <a class="button is-light" onClick="showNext()">Show next 16</a>
-            </div>
-        </div>
-    </section>
-    <br>
-    <br>
-    <br>
-    <br>
+    <div id="javascriptrequired">You need javascript to use this website.</div>
 
+    <div id="content" style="display:none">
+        <section class="hero is-success">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title content">
+                        Create With ES6
+                    </h1>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="column is-9 is-offset-4">
+                    <h3 class="title has-text-grey">Calculate Subnet</h3>
+                    <br>
+                    <p class="subtitle">Original network</p>
+
+                    <p id="original" class="subtitle is-6"></p>
+                    <p class="subtitle">Subnet</p>
+                    <p id="note" class="subtitle is-6"></p>
+                    <p class="subtitle">Result is limited to 16 entries</p>
+                    <form method="POST" action="">
+                        <div id="s2"></div>
+                    </form>
+                    <br>
+                    <a class="button is-light" onClick="showNext()">Show next 16</a>
+                </div>
+            </div>
+        </section>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
 
 </body>
 <script>
@@ -56,7 +68,7 @@
     showSubnet(ip, prefix, i, nu)
     var n = parseInt(i) - parseInt(prefix)
     var total = BigNumber(2).power(n).toString() + " network"
-    
+
     document.getElementById("note").innerHTML = total + " /" + i
     document.getElementById("original").innerHTML = ip + "/" + prefix
 
@@ -66,5 +78,7 @@
         showSubnet(ip, prefix, i, nu)
     }
 </script>
+
+<script> prevent();</script>
 
 </html>

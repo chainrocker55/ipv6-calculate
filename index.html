@@ -11,145 +11,145 @@
     <script src="./stopCopy.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
         crossorigin="anonymous"></script>
-
-    <script>prevent();</script>
-
     <title>Calculate</title>
 </head>
 
 <body>
 
-    <section class="hero is-success">
-        <div class="hero-body">
-            <div class="container">
-                <h1 class="title content">
-                    Create With ES6
-                </h1>
+    <div id="javascriptrequired">You need javascript to use this website.</div>
+
+    <div id="content" style="display:none">
+        <section class="hero is-success">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title content">
+                        Create With ES6
+                    </h1>
+                </div>
             </div>
-        </div>
-    </section>
-    <section is-light>
-        <div class="hero-body ">
-            <div class="container ">
-                <div class="column is-4 is-offset-4">
-                    <h3 class="title has-text-grey">IPV6</h3>
-                    <div class="box">
-                        <form>
-                            <div class="field">
-                                <p>IP Address</p>
-                                <div class="control">
-                                    <input id="ip" required type="text" class="input" placeholder="IP Address" />
+        </section>
+        <section is-light>
+            <div class="hero-body ">
+                <div class="container ">
+                    <div class="column is-4 is-offset-4">
+                        <h3 class="title has-text-grey">IPV6</h3>
+                        <div class="box">
+                            <form>
+                                <div class="field">
+                                    <p>IP Address</p>
+                                    <div class="control">
+                                        <input id="ip" required type="text" class="input" placeholder="IP Address" />
+                                    </div>
+                                    <p class="help is-danger subtitle is-5" id="error"></p>
                                 </div>
-                                <p class="help is-danger subtitle is-5" id="error"></p>
-                            </div>
-                            <div class="field">
-                                <p>Prefix length</p>
-                                <div class="select">
-                                    <select id="prefix" title="Prefix length"></select>
+                                <div class="field">
+                                    <p>Prefix length</p>
+                                    <div class="select">
+                                        <select id="prefix" title="Prefix length"></select>
+                                    </div>
+
                                 </div>
 
-                            </div>
-
-                            <div class="field">
-                                <input class="button is-success is-fullwidth is-large" onClick="renderValues()" value="Calculate">
-                            </div>
-                        </form>
+                                <div class="field">
+                                    <input class="button is-success is-fullwidth is-large" onClick="renderValues()"
+                                        value="Calculate">
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
 
-    <section id="hide">
-        <div class="container">
-            <div class="column is-9 is-offset-4">
-                <h3 class="title has-text-grey">Calculated</h3>
-                <table class="table is-bordered ">
-                    <tbody>
-                        <tr>
-                            <td>IP address</td>
-                            <td id="ipAddress"></td>
-                        </tr>
+        <section id="hide">
+            <div class="container">
+                <div class="column is-9 is-offset-4">
+                    <h3 class="title has-text-grey">Calculated</h3>
+                    <table class="table is-bordered ">
+                        <tbody>
+                            <tr>
+                                <td>IP address</td>
+                                <td id="ipAddress"></td>
+                            </tr>
 
-                        <tr>
-                            <td>Network</td>
-                            <td id="network"></td>
-                        </tr>
+                            <tr>
+                                <td>Network</td>
+                                <td id="network"></td>
+                            </tr>
 
-                        <tr>
-                            <td>Prefix length</td>
-                            <td id="prefixLength"></td>
-                        </tr>
+                            <tr>
+                                <td>Prefix length</td>
+                                <td id="prefixLength"></td>
+                            </tr>
 
-                        <tr>
-                            <td>Network range</td>
-                            <td id="networkLengthStart"></td>
+                            <tr>
+                                <td>Network range</td>
+                                <td id="networkLengthStart"></td>
 
-                        </tr>
-                        <tr>
-                            <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
 
-                            <td id="networkLengthEnd"></td>
-                        </tr>
+                                <td id="networkLengthEnd"></td>
+                            </tr>
 
-                        <tr>
-                            <td>Total IP addresses</td>
-                            <td id="totalIP"></td>
-                        </tr>
+                            <tr>
+                                <td>Total IP addresses</td>
+                                <td id="totalIP"></td>
+                            </tr>
 
-                        <tr>
-                            <td>IP address (full)</td>
-                            <td id="fullIP"></td>
-                        </tr>
+                            <tr>
+                                <td>IP address (full)</td>
+                                <td id="fullIP"></td>
+                            </tr>
 
-                        <tr>
-                            <td>Integer IP</td>
-                            <td id="integerIP"></td>
-                        </tr>
+                            <tr>
+                                <td>Integer IP</td>
+                                <td id="integerIP"></td>
+                            </tr>
 
-                        <tr>
-                            <td>Hexadecimal IP</td>
-                            <td id="hexIP"></td>
-                        </tr>
+                            <tr>
+                                <td>Hexadecimal IP</td>
+                                <td id="hexIP"></td>
+                            </tr>
 
-                        <tr>
-                            <td>Dotted decimal IP</td>
-                            <td id="dotIP"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <tr>
+                                <td>Dotted decimal IP</td>
+                                <td id="dotIP"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="hide2">
-        <div class="container">
-            <div class="column is-9 is-offset-4">
-                <h3 class="title has-text-grey">Subnet</h3>
-                <form method="POST" action="">
-                    <div id="subnet"></div>
-                </form>
+        <section id="hide2">
+            <div class="container">
+                <div class="column is-9 is-offset-4">
+                    <h3 class="title has-text-grey">Subnet</h3>
+                    <form method="POST" action="">
+                        <div id="subnet"></div>
+                    </form>
 
+                </div>
             </div>
-        </div>
-    </section>
-    <br>
-    <br>
-    <br>
-    <br>
+        </section>
+        <br>
+        <br>
+        <br>
+        <br>
 
 
-    <footer class="footer">
-        <div class="content has-text-centered">
-            <p>
-                <strong>59160545</strong> by <a id="footer">Kachain Jantalat</a>
-            </p>
-        </div>
-    </footer>
-
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p>
+                    <strong>59160545</strong> by <a id="footer">Kachain Jantalat</a>
+                </p>
+            </div>
+        </footer>
+    </div>
 
 </body>
-<script>runPrefix(); hide();</script>
-
+<script>runPrefix(); hide();prevent();</script>
 </html>

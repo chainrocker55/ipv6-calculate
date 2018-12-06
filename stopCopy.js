@@ -38,5 +38,6 @@ function prevent() {
             return false;
         }
     }
-
+    document.getElementById("content").style.display = "block"
+    document.getElementById("javascriptrequired").style.display = "none"
 }
