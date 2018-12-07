@@ -163,11 +163,16 @@ function calculateRangeNetworkToHex(ip) {
     return temp;
 }
 function calculateIntegerIP(ip) {
+    ip=ip.toLowerCase();
     var total = BigNumber(0)
     for (var i = 0; i < ip.length; i++) {
         if (ip.substring(i, i + 1) != '0') {
             var n = 32 - i - 1
-            total.plus(BigNumber(16).power(n).multiply(ip.substring(i, i + 1)))
+            var value=ip.substring(i, i + 1)
+            if(value=='a'||value=='b'||value=='c'||value=='d'||value=='f'){
+                value=ConvertBase.hex2dec(value)
+            }
+            total.plus(BigNumber(16).power(n).multiply(value))
         }
 
     }
