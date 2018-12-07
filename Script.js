@@ -174,6 +174,17 @@ function calculateIntegerIP(ip) {
     console.log(total.toString())
     return total;
 }
+function convertFullHex0x(ip) {
+    while(true){
+    if (ip.substring(0, 1) == '0') {
+        ip = ip.substring(1)
+        continue
+    }else{
+        break;
+    }
+    }
+    return ip
+}
 
 
 
@@ -205,6 +216,7 @@ function renderValues() {
     var ip_string = document.getElementById("ip").value
 
     if (checkIPV6(ip_string)) {
+        show();
         document.getElementById("error").innerHTML = null
         //หารูปแบบเต็มของ ip
         var ipfull = convertFullIP(ip_string)
@@ -231,7 +243,7 @@ function renderValues() {
         document.getElementById("networkLengthStart").innerHTML = hextobinStart.join(':') + " -"
         document.getElementById("networkLengthEnd").innerHTML = hextobinEnd.join(':')
 
-        //จำนวน Host ทั้งหมด
+        //จำนวน Host ทั้งหมด total ip
         var n = 128 - prefix;
         var totolIP = BigNumber(2).power((n)).toString()
         console.log("totalIP " + totolIP.toString())
@@ -244,13 +256,16 @@ function renderValues() {
         //fullIPHex
         var ipv6 = ipfull.split(":")
         var fullHexIP = ipv6.join("").toString()
-        document.getElementById("hexIP").innerHTML = "0x" + fullHexIP
         console.log("FullhexIP " + fullHexIP)
+        var convertFull = convertFullHex0x(fullHexIP)
+        console.log("convertFull " + convertFull)
+        document.getElementById("hexIP").innerHTML = "0x" + convertFull
+  
 
-        //ทำการหา จำนวนขนาดของ ip
+        //ทำการหา integer ip
         var intergerIP = calculateIntegerIP(fullHexIP).toString()
         document.getElementById("integerIP").innerHTML = intergerIP
- 
+
         //dotted decimal ip
         var ipv6toHex2 = convertIPtoHex2(ipfull)
         var ipv6toDec = convertIPtoDec(ipv6toHex2)
@@ -259,7 +274,7 @@ function renderValues() {
         //render การแบ่ง subnet
         runSubnet(ip_string)
         //แสดง ส่วนที่ซ่อนไว้
-        show();
+
 
     } else {
         document.getElementById("error").innerHTML = "IP is not IPV6"
@@ -452,6 +467,6 @@ function getValue(ip, i) {
     console.log(i)
     console.log(ip)
     var queryString = "?ip=" + ip + "&i=" + i + "&prefix=" + prefix
-   // window.location.href = "subnet.html" + queryString;
-    window.open("subnet.html" + queryString,"_blank")
+    // window.location.href = "subnet.html" + queryString;
+    window.open("subnet.html" + queryString, "_blank")
 }
